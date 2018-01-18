@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.lee.manageplatform.modules.sys.dao.SysRoleDao">
+
+	<select id="queryObject" resultType="com.lee.manageplatform.modules.sys.entity.SysRoleEntity">
+        select * from tbl_sys_role where role_id = #{value} and status = 1
+	</select>
+	
+	<select id="queryList" resultType="com.lee.manageplatform.modules.sys.entity.SysRoleEntity">
+        select r.*, (select d.name from tbl_sys_dept d where d.dept_id = r.dept_id) deptName from tbl_sys_role r
+        where status = 1
+        <if test="roleName != null and roleName.trim() != ''">
+				and r.`role_name` like concat('%',#{roleName},'%')
+        </if>
+        <if test="roleType != null">
+            and r.`role_type` = #{roleType}
+        </if>
+		<choose>
+			<when test="sidx != null and sidx.trim() != ''">
+				order by r.${sidx} ${order}
+			</when>
+			<otherwise>
+				order by r.role_id asc
+			</otherwise>
+		</choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+	<select id="queryTotal" resultType="int">
+        select count(*) from tbl_sys_role
+        where status = 1
+        <if test="roleName != null and roleName.trim() != ''">
+            and `role_name` like concat('%',#{roleName},'%')
+        </if>
+        <if test="roleType != null">
+            and `role_type` = #{roleType}
+        </if>
+	</select>
+	
+	<insert id="save" parameterType="com.lee.manageplatform.modules.sys.entity.SysRoleEntity" useGeneratedKeys="true" keyProperty="roleId">
+        insert into tbl_sys_role
+		(
+			`role_id`,
+			`role_type`,
+			`role_name`, 
+			`remark`,
+			`dept_id`,
+            `create_id`,
+            `create_time`,
+            `is_useable`
+		)
+		values
+		(
+			#{roleId},
+			#{roleType},
+			#{roleName}, 
+			#{remark},
+			#{deptId},
+            #{createId},
+            #{createTime},
+            #{isUseable}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="com.lee.manageplatform.modules.sys.entity.SysRoleEntity">
+        update tbl_sys_role
+		<set> 
+			<if test="roleName != null">`role_name` = #{roleName}, </if>
+			<if test="remark != null">`remark` = #{remark},</if>
+			<if test="deptId != null">`dept_id` = #{deptId}, </if>
+            <if test="roleName != null">`update_id` = #{updateId},</if>
+            <if test="roleName != null">`update_time` = #{updateTime},</if>
+            <if test="roleName != null">`is_useable` = #{isUseable},</if>
+		</set>
+		WHERE role_id = #{roleId}
+	</update>
+	
+	<delete id="deleteBatch">
+        UPDATE tbl_sys_role SET status = 0 WHERE role_id in
+		<foreach item="roleId" collection="array" open="(" separator="," close=")">
+			#{roleId}
+		</foreach>
+		;
+        UPDATE tbl_sys_role_menu SET status = 0 WHERE role_id in
+		<foreach item="roleId" collection="array" open="(" separator="," close=")">
+			#{roleId}
+		</foreach>
+		;
+        UPDATE tbl_sys_role_dept SET status = 0 WHERE role_id in
+		<foreach item="roleId" collection="array" open="(" separator="," close=")">
+			#{roleId}
+		</foreach>
+		;
+        UPDATE tbl_sys_user_role SET status = 0 where role_id in
+		<foreach item="roleId" collection="array" open="(" separator="," close=")">
+			#{roleId}
+		</foreach>
+	</delete>
+
+    <!--根据部门id查询部门所拥有的角色信息-->
+    <select id="selectByDeptId" parameterType="map" resultType="com.lee.manageplatform.modules.sys.entity.SysRoleEntity">
+		SELECT role.* FROM tbl_sys_role role left join tbl_sys_role_dept rd on role.role_id = rd.role_id
+		WHERE rd.dept_id = #{deptId} AND rd.status = 1
+		and role.`status`  =1
+
+        <if test="roleType != null">
+            AND `role_type` = #{roleType}
+        </if>
+    </select>
+
+</mapper>

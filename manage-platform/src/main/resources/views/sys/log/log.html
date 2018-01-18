@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+  <title>日志管理--后台管理</title>
+	<meta name="renderer" content="webkit">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="format-detection" content="telephone=no">
+	<link rel="stylesheet" href="../../layui/css/layui.css" media="all" />
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="//at.alicdn.com/t/font_420486_hycsbg46i2e53ik9.css"/>
+
+</head>
+<body class="childrenBody">
+	<div class="layui-tab">
+		<blockquote class="layui-elem-quote news_search">
+
+      <div class="layui-inline">
+        <form class="layui-form" id="roleSearchForm">
+          <div class="layui-input-inline" style="width:110px;">
+            <select name="searchTerm" >
+              <option value="userName">用户名</option>
+              <option value="operation">操作</option>
+            </select>
+          </div>
+          <div class="layui-input-inline" style="width:145px;">
+            <input type="text" name="searchContent" value="" placeholder="请输入关键字" class="layui-input search_input">
+          </div>
+          <a class="layui-btn " id="logSearch" lay-submit lay-filter="logSearchFilter"><i class="layui-icon icon-font larry-chaxun7"></i>查询</a>
+        </form>
+
+      </div>
+
+		</blockquote>
+
+    <div class="larry-separate"></div>
+    <!-- 日志列表 -->
+    <div class="layui-tab-item  layui-show" style="padding: 10px 15px;">
+      <table id="logTableList"></table>
+    </div>
+
+  </div>
+	<script type="text/javascript" src="../../layui/layui.js"></script>
+  <script type="text/javascript" src="../../libs/jquery.min.js"></script>
+  <!--<script type="text/javascript" src="/libs/vue.min.js"></script>-->
+  <script type="text/javascript" src="../../js/common.js"></script>
+	<script type="text/javascript" src="../../js/sys/log.js"></script>
+</body>
+</html>

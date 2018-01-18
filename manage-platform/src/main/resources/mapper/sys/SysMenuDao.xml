@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.lee.manageplatform.modules.sys.dao.SysMenuDao">
+
+	<select id="queryObject" resultType="com.lee.manageplatform.modules.sys.entity.SysMenuEntity">
+        select * from tbl_sys_menu where menu_id = #{value} AND status = 1
+	</select>
+	
+	<insert id="save" parameterType="com.lee.manageplatform.modules.sys.entity.SysMenuEntity">
+        insert into tbl_sys_menu
+		(
+			`menu_id`, 
+			`parent_id`, 
+			`name`, 
+			`url`, 
+			`perms`, 
+			`type`, 
+			`icon`, 
+			`order_num`,
+			`level`
+		)
+		values
+		(
+			#{menuId}, 
+			#{parentId}, 
+			#{name}, 
+			#{url}, 
+			#{perms}, 
+			#{type}, 
+			#{icon}, 
+			#{orderNum},
+			#{level}
+		)
+	</insert>
+
+    <!--查询二级三级菜单 管理员-->
+	<select id="queryListParentId" resultType="com.lee.manageplatform.modules.sys.entity.SysMenuEntity">
+        select * from tbl_sys_menu
+		where parent_id = #{parentId} AND TYPE = 1 AND status = 1
+		order by order_num asc
+	</select>
+
+    <!--查询用户所拥有的二级三级菜单
+    备份错误 sql
+            select * from tbl_sys_user_role ur
+        LEFT JOIN tbl_sys_role_menu rm on ur.role_id = rm.role_id
+        LEFT JOIN tbl_sys_menu m on rm.menu_id = m.menu_id
+        where parent_id = #{parentId} AND TYPE = 1 AND ur.`status` = 1 AND rm.`status` = 1 AND m.`status` = 1
+        <if test="userId != null and userId != '' ">
+            AND ur.user_id = #{userId}
+        </if>
+        order by order_num asc
+    -->
+    <select id="queryByParentIdAndUserId" parameterType="map" resultType="com.lee.manageplatform.modules.sys.entity.SysMenuEntity">
+        SELECT * FROM tbl_sys_menu WHERE parent_id = #{parentId} AND TYPE = 1 AND status = 1 AND  menu_id in (
+            SELECT DISTINCT menu_id FROM tbl_sys_role_menu WHERE status =1
+            AND role_id in (select role_id from tbl_sys_user_role WHERE status=1
+            <if test="userId != null and userId != '' ">
+              AND user_id = #{userId}
+            </if>)
+        )
+        order by order_num asc;
+    </select>
+
+	<select id="queryNotButtonList" resultType="com.lee.manageplatform.modules.sys.entity.SysMenuEntity">
+        select * from tbl_sys_menu where type != 2 order by order_num asc
+	</select>
+	
+	<select id="queryList" resultType="com.lee.manageplatform.modules.sys.entity.SysMenuEntity">
+        select m.*,(select p.name from tbl_sys_menu p where p.menu_id = m.parent_id) as parentName
+        from tbl_sys_menu m
+        WHERE m.status = 1
+		<choose>
+			<when test="sidx != null and sidx.trim() != ''">
+				order by m.${sidx} ${order}
+			</when>
+			<otherwise>
+				order by m.order_num asc
+			</otherwise>
+		</choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+	<!-- 查询用户的权限列表 一级菜单 -->
+	<select id="selectUserList" parameterType="java.lang.Long" resultType="com.lee.manageplatform.modules.sys.entity.SysMenuEntity">
+        select distinct m.*,(select p.name from tbl_sys_menu p where p.menu_id = m.parent_id) as parentName
+        from tbl_sys_user_role ur
+        LEFT JOIN tbl_sys_role_menu rm on ur.role_id = rm.role_id
+        LEFT JOIN tbl_sys_menu m on rm.menu_id = m.menu_id
+        where type = 1 AND level = 1 AND ur.`status` = 1 AND rm.`status` = 1 AND m.`status` = 1
+        <if test="userId != null and userId != '' ">
+           AND ur.user_id = #{userId}
+        </if>
+		order by m.order_num asc
+	</select>
+	
+	<select id="queryTotal" resultType="int">
+        select count(*) from tbl_sys_menu WHERE status = 1
+	</select>
+	 
+	<update id="update" parameterType="com.lee.manageplatform.modules.sys.entity.SysMenuEntity">
+        update tbl_sys_menu
+		<set> 
+			<if test="parentId != null">`parent_id` = #{parentId}, </if>
+			<if test="name != null">`name` = #{name}, </if>
+			<if test="url != null">`url` = #{url}, </if>
+			<if test="perms != null">`perms` = #{perms}, </if>
+			<if test="type != null">`type` = #{type}, </if>
+			<if test="icon != null">`icon` = #{icon}, </if>
+			<if test="orderNum != null">`order_num` = #{orderNum},</if>
+            <if test="orderNum != null">`level` = #{level}</if>
+		</set>
+		where menu_id = #{menuId}
+	</update>
+
+    <!--删除菜单关系-->
+    <delete id="deleteBatch">
+        UPDATE tbl_sys_menu SET status = 0 where menu_id in
+        <foreach item="menuId" collection="array" open="(" separator="," close=")">
+            #{menuId}
+        </foreach>
+        ;
+        UPDATE tbl_sys_role_menu SET status = 0 where menu_id in
+        <foreach item="menuId" collection="array" open="(" separator="," close=")">
+            #{menuId}
+        </foreach>
+    </delete>
+
+    <!--根据菜单类型、和菜单级别查询菜单信息 -->
+    <select id="selectByTypeAndLevel" parameterType="map" resultType="com.lee.manageplatform.modules.sys.entity.SysMenuEntity">
+        SELECT * FROM tbl_sys_menu
+        WHERE type = #{type}
+        AND level = #{level}
+        AND status = 1
+        <if test="menuId != null">
+            AND menu_id != #{menuId}
+        </if>
+
+    </select>
+	<!--查询全部 -->
+    <select id="queryAll" resultType="com.lee.manageplatform.modules.sys.entity.SysMenuEntity">
+        SELECT * FROM tbl_sys_menu
+        WHERE status = 1
+    </select>
+
+
+</mapper>

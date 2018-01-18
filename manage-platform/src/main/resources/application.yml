@@ -2,7 +2,7 @@
 spring:
     # 环境 dev|test|pro
     profiles:
-        active: test
+        active: dev
     datasource:
         type: com.alibaba.druid.pool.DruidDataSource
         driverClassName: com.mysql.jdbc.Driver
@@ -30,6 +30,9 @@ spring:
         encoding: UTF-8
         content-type: text/html
         cache: false
+    session:
+        store-type: none
+
 # Mybatis配置
 mybatis:
     mapperLocations: classpath*:mapper/**/*.xml

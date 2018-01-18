@@ -5,7 +5,7 @@ server:
         max-threads: 1000
         min-spare-threads: 30
     port: 8018
-#    context-path: /geec-web
+    context-path: /manage
 
 spring:
     datasource:
@@ -30,7 +30,7 @@ spring:
 
     #redis配置
     redis:
-        host: 10.12.2.207
+        host: 127.0.0.1
         port: 6379
         # REDIS (RedisProperties)
         # Redis数据库索引（默认为0）
@@ -48,15 +48,3 @@ spring:
             max-idle: 200
             # 连接池中的最小空闲连接
             min-idle: 0
-
-   #solr配置
-    data:
-         solr:
-            host: http://112.35.22.232:8025/solr
-
-alert:
-    phoneNumber: 15811388589
-    #设置大点 否则会发短信告警，如果短信包是生产的 则会阻塞，所以避免告警
-    maxTime: 999999999999999
-    flumeAddr: http://112.35.22.232:8025/analyzeVesopera.gif
-    systemType: 1

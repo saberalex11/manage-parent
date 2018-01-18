@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>权限分配--后台管理</title>
+	<meta name="renderer" content="webkit">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="format-detection" content="telephone=no">
+	<link rel="stylesheet" href="../../layui/css/layui.css" media="all" />
+  <link rel="stylesheet" href="../../plugins/ztree/css/zTreeStyle/zTreeStyle.css">
+  <link rel="stylesheet" href="//at.alicdn.com/t/font_420486_hycsbg46i2e53ik9.css"/>
+
+  <style>
+    .layui-input-inline .layui-form-mid .layui-word-aux{
+      color: #dd2420;
+    }
+    .layui-table-view .layui-table {
+      position: relative;
+      /*width:auto;*/
+      width: 100%;
+      matgin: 0;
+    }
+  </style>
+</head>
+<body class="childrenBody">
+<div class="layui-tab layui-tab-card" lay-filter="assign">
+	  <ul class="layui-tab-title">
+	    <li class="layui-this">角色资源分配</li>
+	    <li>组织角色分配</li>
+	    <li>用户角色分配</li>
+	  </ul>
+	  <div class="layui-tab-content" style="height:100%;">
+	  	<!--角色资源分配页面-->
+	    <div class="layui-tab-item layui-show layui-row" id="dqRoleAssign">
+	    	
+        <form class="layui-form layui-col-xs8">
+            <blockquote class="layui-elem-quote">
+                <div class="layui-input-inline">
+                  <input type="text" id="roleSearchName" placeholder="请输入角色名称" class="layui-input">
+                </div>
+                <a class="layui-btn" id="roleSearch">查询</a>
+                <a class="layui-btn layui-btn-primary" id="roleReset">重置</a>
+            </blockquote>
+            <!-- 角色列表 -->
+            <table lay-skin="line" id="roleTableList" lay-filter="roleTable">
+            </table>
+			  </form>
+			
+        <div class="layui-form layui-col-xs4" style="left:18px;">
+          <div style=" height: 480px; padding: 0px; border: 1px solid #ddd; overflow: auto;">
+              <div class="layui-bg-gray">
+                <div class="layui-input-inline">
+                  <label class="layui-form-label">所选角色：</label>
+                  <div class="layui-form-mid layui-word-aux" id="roleName">
+                    未选择
+                  </div>
+                  <input type="hidden" id="roleId" />
+                </div>
+                <div class="layui-input-inline" style="float:right">
+                  <a class="layui-btn layui-btn-primary layui-hide" id="roleMenuSave">保存资源</a>
+                </div>
+              </div>
+              <ul id="menuTree" class="ztree layui-hide"></ul>
+          </div>
+
+        </div>
+
+      </div>
+	    <!--组织角色分配页面-->
+	    <div class="layui-tab-item">
+        <!--部门(组织)树-->
+        <div class="layui-form layui-col-xs4" style="top:13px;">
+          <div style=" height: 480px; padding: 0px; border: 1px solid #ddd; overflow: auto;">
+            <ul id="deptTree" class="ztree"></ul>
+          </div>
+        </div>
+        <!--角色列表-->
+        <div class="layui-form layui-col-xs8"
+             style="left:18px;top:13px; height: 480px; padding: 0px; border: 1px solid #ddd; overflow: auto;">
+
+          <div class="layui-bg-gray">
+            <div class="layui-input-inline">
+              <label class="layui-form-label">所选组织：</label>
+              <div class="layui-form-mid layui-word-aux" id="deptName">
+                未选择
+              </div>
+              <input type="hidden" id="deptId" />
+            </div>
+            <div class="layui-input-inline" style="float:right">
+              <a class="layui-btn layui-btn-primary layui-hide" id="deptRoleSave">保存角色</a>
+            </div>
+          </div>
+          <!-- 角色列表 -->
+          <table class="layui-table" lay-skin="line" id="deptRoleTableList" lay-filter="deptRoleTable">
+          </table>
+        </div>
+
+      </div>
+
+      <!--用户角色分配页面-->
+	    <div class="layui-tab-item">
+        <form class="layui-form layui-col-xs6">
+          <blockquote class="layui-elem-quote">
+            <div class="layui-input-inline">
+              <input type="text" id="userSearchAccount" placeholder="请输入工号" class="layui-input">
+            </div>
+            <a class="layui-btn" id="userSearch">查询</a>
+            <a class="layui-btn layui-btn-primary" id="userReset">重置</a>
+          </blockquote>
+          <!-- 用户列表 -->
+          <table lay-skin="line" id="userTableList" lay-filter="userTable">
+          </table>
+        </form>
+
+        <div class="layui-form layui-col-xs6" style="left:18px;">
+          <div style=" height: 480px; padding: 0px; border: 1px solid #ddd; overflow: auto;">
+            <div class="layui-bg-gray">
+              <div class="layui-input-inline">
+                <label class="layui-form-label">所选用户：</label>
+                <div class="layui-form-mid layui-word-aux" id="userName">
+                  未选择
+                </div>
+                <input type="hidden" id="userId" />
+              </div>
+              <div class="layui-input-inline" style="float:right">
+                <a class="layui-btn layui-btn-primary layui-hide" id="userRoleSave">保存角色</a>
+              </div>
+            </div>
+            <!-- 角色选择列表 -->
+            <table lay-skin="line" id="userRoleTableList" lay-filter="userRoleTable">
+            </table>
+
+          </div>
+
+        </div>
+
+      </div>
+	    
+	  </div>
+	</div>
+
+<!-- 用户状态tpl-->
+<script type="text/html" id="userStatusTpl">
+  {{# if(d.status == 0){ }}
+  <span class="label label-danger ">禁用</span>
+  {{# } else if(d.status == 1){ }}
+  <span class="label label-success ">正常</span>
+  {{# } else { }}
+  {{d.status}}
+  {{# }  }}
+</script>
+
+<!-- 角色tpl-->
+<script type="text/html" id="roleTpl">
+  {{# if(d.roleType == 1){ }}
+  <span class="label label-success">功能权限角色</span>
+  {{# } else if(d.roleType == 2){ }}
+  <span class="label label-success">数据权限角色</span>
+  {{# } }}
+</script>
+
+  <script type="text/javascript" src="../../layui/layui.js"></script>
+  <script type="text/javascript" src="../../libs/jquery.min.js"></script>
+  <script type="text/javascript" src="../../libs/vue.js"></script>
+  <script type="text/javascript" src="../../plugins/ztree/jquery.ztree.all.min.js"></script>
+  <script type="text/javascript" src="../../js/common.js"></script>
+	<script type="text/javascript" src="../../js/sys/permAssign.js"></script>
+</body>
+</html>

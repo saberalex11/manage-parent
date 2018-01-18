@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>后台管理系统</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta http-equiv="Access-Control-Allow-Origin" content="*">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="shortcut icon" href="/favicon.ico">
+
+    <link rel="stylesheet" href="//at.alicdn.com/t/font_420486_hycsbg46i2e53ik9.css"/>
+    <link rel="stylesheet" href="../../layui/css/layui.css">
+    <!--<link rel="stylesheet" href="../../css/global.css">-->
+    <link rel="stylesheet" href="../../css/bootstrap.min.css">
+    <link rel="stylesheet" href="../../css/bootstrap-table.min.css">
+    <link rel="stylesheet" href="../../plugins/ztree/css/metroStyle/metroStyle.css">
+    <link rel="stylesheet" href="../../plugins/jqgrid/ui.jqgrid-bootstrap.css">
+    <link rel="stylesheet" href="../../plugins/treegrid/jquery.treegrid.css">
+</head>
+<body>
+  <div id="dqapp" v-cloak>
+    <div class="larry-grid" v-show="showList">
+        <div class="larry-personal" >
+            <div class="layui-tab" >
+                <blockquote class="layui-elem-quote mylog-info-tit">
+                    <div class="layui-inline">
+                        <a class="layui-btn layui-btn-normal layui-hide" id="menuAdd_btn"> <i class="layui-icon icon-font larry-xinzeng1"></i>新增菜单</a>
+                    </div>
+                </blockquote>
+              <!--<div class="larry-separate"></div>-->
+                <!-- 菜单列表 -->
+              <div class="layui-tab-item layui-show" style="padding:0px 15px;">
+                <table id="menuTable" data-mobile-responsive="true" data-click-to-select="true">
+                  <thead>
+                  <tr>
+                    <th data-field="selectItem" data-checkbox="true"></th>
+                  </tr>
+                  </thead>
+                </table>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!--新增菜单-->
+    <div v-show="!showList" id="menuAdd">
+        <blockquote class="layui-elem-quote layui-quote-nm"
+                    style="border-radius:0.25em;color: #31708f;background-color: #d9edf7;border-width:1px; padding:6px; border-color:#bce8f1;">
+          温馨提示:1.菜单类型为菜单时父级菜单可以为空;2.菜单类型为按钮时父级菜单不能为空;
+          3.父级菜单选中时，资源路径不能为空按钮除外
+        </blockquote>
+        <form class="layui-form layui-form-pane" style="width:100%; text-align: center;">
+
+          <div class="layui-form-item">
+            <div class="layui-inline">
+              <label class="layui-form-label">菜单名称</label>
+              <div class="layui-input-inline">
+                <input type="text" class="layui-input" maxlength="20" v-model="menu.name" lay-verify="required|resName" placeholder="请输入菜单名称">
+              </div>
+            </div>
+
+            <div class="layui-inline">
+              <label class="layui-form-label">菜单类型</label>
+              <div class="layui-input-inline">
+                <select id="menuType" lay-filter="menuTypeFilter">
+                  <option value="-1">请选择</option>
+                  <option value="1">菜单</option>
+                  <option value="2">按钮</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div class="layui-form-item" lay-filter="menuLevel">
+            <div class="layui-inline">
+              <label class="layui-form-label">菜单级别</label>
+              <div class="layui-input-inline">
+                <select id="menuLevel" lay-filter="menuLevelFilter">
+                  <option value="-1">请选择</option>
+                  <option value="1">一级菜单</option>
+                  <option value="2">二级菜单</option>
+                  <option value="3">三级菜单</option>
+                </select>
+              </div>
+            </div>
+            <div class="layui-inline">
+              <label class="layui-form-label">父级菜单</label>
+              <div class="layui-input-inline">
+                <input type="text" class="layui-input" id="parentId" v-model="menu.parentName" style="cursor:pointer;"
+                       readonly="readonly" placeholder="请选择上级菜单">
+              </div>
+            </div>
+          </div>
+
+          <div class="layui-form-item">
+
+            <div class="layui-inline">
+              <label class="layui-form-label">排序</label>
+              <div class="layui-input-inline">
+                <input type="text" v-model="menu.orderNum" class="layui-input" lay-verify="orderNum" maxlength="10">
+              </div>
+            </div>
+
+            <div class="layui-inline">
+              <label class="layui-form-label">菜单路径</label>
+              <div class="layui-input-inline">
+                <input type="text" id="url" v-model="menu.url" class="layui-input" maxlength="50">
+              </div>
+            </div>
+
+          </div>
+
+          <div class="layui-form-item">
+
+            <div class="layui-inline">
+              <label class="layui-form-label">菜单权限</label>
+              <div class="layui-input-inline">
+                <input type="text" class="layui-input" maxlength="500" lay-verify="resLinkAddress" v-model="menu.perms">
+              </div>
+            </div>
+
+            <div class="layui-inline">
+              <label class="layui-form-label">菜单图标</label>
+              <div class="layui-input-inline">
+                <input type="text" class="layui-input" id="icon" lay-verify="required" v-model="menu.icon" disabled>
+              </div>
+              <div class="layui-form-mid layui-word-aux">
+                <a class="layui-btn layui-btn-mini" id="select_img" title="选择图标">
+                  <i class="iconfont icon-tupian"></i>
+                </a>
+              </div>
+            </div>
+
+          </div>
+
+        </form>
+
+        <div class="layui-form-item" style="text-align: center;">
+          <button class="layui-btn" lay-submit="" lay-filter="saveMenu">保存</button>
+          <button type="layui-btn" id="cancle" class="layui-btn layui-btn-primary">取消</button>
+        </div>
+
+    </div>
+  </div>
+
+  <!-- 选择菜单 -->
+  <div id="menuLayer" style="display: none;padding:10px;">
+    <ul id="menuTree" class="ztree"></ul>
+  </div>
+
+  <script src="../../libs/jquery.min.js"></script>
+  <script src="../../libs/bootstrap.min.js"></script>
+  <script src="../../libs/bootstrap-table.min.js"></script>
+  <script src="../../plugins/treegrid/jquery.treegrid.min.js"></script>
+  <script src="../../plugins/treegrid/jquery.treegrid.bootstrap3.js"></script>
+  <script src="../../plugins/treegrid/jquery.treegrid.extension.js"></script>
+  <script src="../../plugins/treegrid/tree.table.js"></script>
+  <script src="../../plugins/jqgrid/grid.locale-cn.js"></script>
+  <script src="../../plugins/jqgrid/jquery.jqGrid.min.js"></script>
+
+  <script src="../../libs/vue.js"></script>
+  <script src="../../plugins/ztree/jquery.ztree.all.min.js"></script>
+  <script type="text/javascript" src="../../layui/layui.js"></script>
+  <script type="text/javascript" src="../../js/common.js"></script>
+  <script type="text/javascript" src="../../js/sys/menu.js"></script>
+</body>
+</html>
