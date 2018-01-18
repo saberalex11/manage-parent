@@ -1,0 +1,36 @@
+# mysql
+spring:
+    # 环境 dev|test|pro
+    profiles:
+        active: test
+    datasource:
+        type: com.alibaba.druid.pool.DruidDataSource
+        driverClassName: com.mysql.jdbc.Driver
+    # jackson时间格式化
+    jackson:
+        time-zone: GMT+8
+        date-format: yyyy-MM-dd HH:mm:ss
+    ##文件上传配置
+    http:
+        multipart:
+          enabled: true
+          max-file-size: 100MB
+          max-request-size: 100MB
+    # 指定静态资源的路径
+    resources:
+        static-locations: classpath:/static/,classpath:/views/
+    # Spring devtools
+    devtools:
+         restart:
+               enabled: true
+    thymeleaf:
+        prefix: classpath:/views/
+        suffix: .html
+        mode: HTML
+        encoding: UTF-8
+        content-type: text/html
+        cache: false
+# Mybatis配置
+mybatis:
+    mapperLocations: classpath*:mapper/**/*.xml
+    configLocation: classpath:mybatis.xml

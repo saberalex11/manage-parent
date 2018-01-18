@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <!-- ch.qos.logback.core.ConsoleAppender 控制台输出 生产把这个注释-->
+    <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>[%-5level] %d{HH:mm:ss.SSS} [%thread] %logger{36} - %msg%n
+            </pattern>
+        </encoder>
+    </appender>
+    <springProfile name="dev,test">
+        <logger name="org.springframework" level="DEBUG" />
+        <logger name="org.springboot.sample" level="DEBUG" />
+        <logger name="org.spring.springboot.dao" level="DEBUG" />
+        <logger name="com.asiainfo" level="DEBUG" />
+    </springProfile>
+    <!-- ch.qos.logback.core.rolling.RollingFileAppender 文件日志输出 本地不需要则注释-->
+    <!--<appender name="file"-->
+    <!--class="ch.qos.logback.core.rolling.RollingFileAppender">-->
+    <!--<File>/home/geecuser/console/log/console.log</File>-->
+    <!--<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">-->
+    <!--<FileNamePattern>-->
+    <!--/home/geecuser/console/log/console-%d{yyyy-MM-dd}-%i.log.gz-->
+    <!--</FileNamePattern>-->
+    <!--<MaxHistory>30</MaxHistory>-->
+    <!--<TimeBasedFileNamingAndTriggeringPolicy-->
+    <!--class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">-->
+    <!--<MaxFileSize>5MB</MaxFileSize>-->
+    <!--</TimeBasedFileNamingAndTriggeringPolicy>-->
+    <!--</rollingPolicy>-->
+    <!--<layout class="ch.qos.logback.classic.PatternLayout">-->
+    <!--<pattern>[%-5level] %d{HH:mm:ss.SSS} [%thread] %logger{36} - %msg%n-->
+    <!--</pattern>-->
+    <!--</layout>-->
+    <!--</appender>-->
+
+    <!-- 日志级别 -->
+    <root>
+        <!-- 定义了ERROR和INFO级别的日志，分别在FILE文件和控制台输出 -->
+        <!--<level value="debug" />&lt;!&ndash; 生产把这个注释了 &ndash;&gt;-->
+        <level value="error" />
+        <level value="info" />
+        <!--<appender-ref ref="file" />-->
+        <appender-ref ref="console" />
+    </root>
+
+</configuration>
