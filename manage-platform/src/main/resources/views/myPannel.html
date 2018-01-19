@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="utf-8">
+	<title>后台管理</title>
+	<meta name="renderer" content="webkit">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta http-equiv="Access-Control-Allow-Origin" content="*">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+	<meta name="format-detection" content="telephone=no">
+	<link rel="icon" href="favicon.ico">
+  <link rel="stylesheet" href="//at.alicdn.com/t/font_420486_hycsbg46i2e53ik9.css">
+  
+  <link rel="stylesheet" href="./layui/css/layui.css" media="all">
+  <link rel="stylesheet" href="./layui/css/modules/layer/default/layer.css" media="all">
+  <link rel="stylesheet" href="./layui/css/modules/laydate/default/laydate.css" media="all">
+  <link rel="stylesheet" href="./layui/css/modules/code.css" media="all">
+   		 
+  <link rel="stylesheet" href="./css/global.css" media="all">
+  <link rel="stylesheet" href="./css/index.css" media="all"/>
+
+</head>
+<body class="main_body" style="background-color: #f4f4f4; overflow-y: auto">
+	<div class="layui-container " style="padding-top: 15px;padding-bottom: 20px;">  
+	 <div class="layui-row layui-col-space8">
+	    <div class="layui-col-md4">
+	      <div style="text-align:center;padding:30px;background-color: #ffffff;" >
+	    		<p >我的待处理：</p>
+	    		<p style="font-size:26px;color:red;" id = "bannersCount">2</p>
+	    	  </div>
+	    </div>
+	    <div class="layui-col-md4">
+		    <div style="text-align:center;padding:30px;background-color: #ffffff;">
+		      <p>今日课程</p>
+		    		<p style="font-size:26px;color:red;" id="hotProductCount">5</p>
+	    		</div>
+	    </div>
+	    <div class="layui-col-md4">
+	    <div style="text-align:center;padding:30px;background-color: #ffffff;">
+	    		<p id="">我的学生数量：</p>
+	    		<p style="font-size:26px;color:red;" id = "recommandProductCount">10</p>
+	    	  </div>
+	    </div>
+	  </div>
+
+		<div class="layui-row layui-col-space10">
+			<div class="layui-col-md6">
+				<div class="layui-row" style="height: 350px; background-color: #ffffff;">
+					<div class="layui-col-md12" style="margin-bottom: 10px;">
+						<div style="margin-left: 10px; margin-top: 10px; margin-right: 10px;">
+							<div style="float: left;">待办事项</div>
+						</div>
+					</div>
+					<div class="layui-col-md12">
+						<table class="layui-table" lay-size="sm" style="width: 98%; margin: auto;" lay-skin="nob">
+							<thead>
+								<tr>
+									<th>banner</th>
+									<th>热门产品</th>
+									<th>推荐解决方案</th>
+									<th>推荐产品</th>
+									<th>推荐终端</th>
+								</tr>
+							</thead>
+							<tbody id="audit">
+								<tr>
+									<td>大会</td>
+									<td>千里眼</td>
+									<td>政务云</td>
+									<td>400</td>
+									<td>千里眼</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+			<div class="layui-col-md6">
+				<div class="layui-row" style="height: 350px; background-color: #ffffff;">
+					<div class="layui-col-md12" style="margin-bottom: 10px;">
+						<div style="margin-left: 10px; margin-top: 10px; margin-right: 10px;">
+							<div style="float: left;">banner总览</div>
+							<div style="float: right;"></div>
+						</div>
+					</div>
+					<div class="layui-col-md12" >
+						<table class="layui-table" lay-size="sm" style="width: 98%; margin: auto;" lay-skin="nob">
+							<thead>
+								<tr>
+									<th>跳转链接</th>
+									<th>排序</th>
+								</tr>
+							</thead>
+							<tbody id="banners"></tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+<div class="layui-row layui-col-space10">
+			<div class="layui-col-md6" >
+				<div class="layui-row" style="height: 350px; background-color: #ffffff;">
+					<div class="layui-col-md12" style="margin-bottom: 10px;">
+						<div style="margin-left: 10px; margin-top: 10px; margin-right: 10px;">
+							<div style="float: left;">热门产品</div>
+							<div style="float: right;"></div>
+						</div>
+					</div>
+					<div class="layui-col-md12">
+						<table class="layui-table" lay-size="sm" style="width: 98%; margin: auto;" lay-skin="nob">
+							<thead>
+								<tr>
+									<th>产品名称</th>
+									<th>排序</th>
+								</tr>
+							</thead>
+							<tbody id="hotProduct"></tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+			<div class="layui-col-md6">
+				<div class="layui-row" style="height: 350px; background-color: #ffffff;">
+					<div class="layui-col-md12" style="margin-bottom: 10px;">
+						<div style="margin-left: 10px; margin-top: 10px; margin-right: 10px;">
+							<div style="float: left;">推荐解决方案</div>
+							<div style="float: right;"><a href="/ec-console/recommend/solutionrecommend.html">...</a></div>
+						</div>
+					</div>
+					<div class="layui-col-md12">
+						<table class="layui-table" lay-size="sm" style="width: 98%; margin: auto;" lay-skin="nob">
+							<thead>
+								<tr>
+									<th>解决方案名称</th>
+									<th>排序</th>
+								</tr>
+							</thead>
+							<tbody id="recommandSolutions"></tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+	
+	<div class="layui-row layui-col-space10">
+			<div class="layui-col-md6">
+				<div class="layui-row" style="height: 350px; background-color: #ffffff;">
+					<div class="layui-col-md12" style="margin-bottom: 10px;">
+						<div style="margin-left: 10px; margin-top: 10px; margin-right: 10px;">
+							<div style="float: left;">推荐产品</div>
+							<div style="float: right;"><a href="/ec-console/recommend/productrecommend.html">...</a></div>
+						</div>
+					</div>
+					<div class="layui-col-md12">
+						<table class="layui-table" lay-size="sm" style="width: 98%; margin: auto;" lay-skin="nob">
+							<thead>
+								<tr>
+									<th>产品名称</th>
+									<th>排序</th>
+								</tr>
+							</thead>
+							<tbody id="recommandProducts"></tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+			<div class="layui-col-md6">
+				<div class="layui-row" style="height: 350px; background-color: #ffffff;">
+					<div class="layui-col-md12" style="margin-bottom: 10px;">
+						<div style="margin-left: 10px; margin-top: 10px; margin-right: 10px;">
+							<div style="float: left;">推荐终端</div>
+							<div style="float: right;"><a href="/ec-console/recommend/terminalrecommend.html">...</a></div>
+						</div>
+					</div>
+					<div class="layui-col-md12">
+						<table class="layui-table" lay-size="sm" style="width: 98%; margin: auto;" lay-skin="nob">
+							<thead>
+								<tr>
+									<th>终端名称</th>
+									<th>排序</th>
+								</tr>
+							</thead>
+							<tbody id="recommandHardware"></tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+			
+		</div>
+	
+	</div>
+</body>
+<script type="text/javascript" src="./layui/layui.js"></script>
+<script type="text/javascript" src="./libs/jquery.min.js"></script>
+<script type="text/javascript" src="./js/common.js"></script>
+<!--<script type="text/javascript" src="./js/cms/home/indexCount.js"></script>-->
+</html>
+	  
