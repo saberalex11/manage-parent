@@ -64,7 +64,7 @@
     </select>
 
 	<select id="queryNotButtonList" resultType="com.lee.manageplatform.modules.sys.entity.SysMenuEntity">
-        select * from tbl_sys_menu where type != 2 order by order_num asc
+        select * from tbl_sys_menu where type != 2 and status = 1 order by order_num asc
 	</select>
 	
 	<select id="queryList" resultType="com.lee.manageplatform.modules.sys.entity.SysMenuEntity">

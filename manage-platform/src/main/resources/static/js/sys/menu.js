@@ -28,11 +28,21 @@ layui.config({
 
       vm.showList = false;
       vm.title = "新增";
+      vm.menu.parentId = 0;
+      vm.menu.orderNum = 0;
+      vm.menu.menuId = null;
+      vm.menu.name = null;
 
+      vm.menu.url = null;
+      vm.menu.perms = null;
+      vm.menu.icon = null;
+      /*layui方式的选中select*/
+      $("#menuType").next().find("dd[lay-value='"+-1+"']").click();
+      $("#menuLevel").next().find("dd[lay-value='"+-1+"']").click();
       vm.getMenu();
       //获取选中的行
       var selected = $('#menuTable').bootstrapTreeTable('getSelections');
-      if (selected.length == 0) {
+      if (selected.length === 0) {
       } else {
         vm.menu.parentName = selected[0].name;
       }
@@ -152,7 +162,8 @@ layui.config({
   /**保存菜单资源信息*/
   form.on("submit(saveMenu)", function (data) {
     var resSaveLoading = top.layer.msg('数据提交中，请稍候', {icon: 16, time: false, shade: 0.8});
-    var url = vm.menu.menuId == null ? "sys/menu/save" : "sys/menu/update";
+    var url = vm.menu.menuId === null ? "sys/menu/save" : "sys/menu/update";
+      console.log(url);
     vm.menu.type = $("#menuType option:selected").val();
     vm.menu.level = $("#menuLevel option:selected").val();
 
@@ -218,7 +229,8 @@ var vm = new Vue({
     menu:{
       parentName:null,
       parentId:0,
-      orderNum:0
+      orderNum:0,
+      menuId:null
     }
   },
   methods: {
